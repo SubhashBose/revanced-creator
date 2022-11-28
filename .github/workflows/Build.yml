@@ -47,7 +47,7 @@ jobs:
 
        - name: Build youtube-music
          env:
-            KEYSTORE: ${{ secrets.YTMUSIC_KEYSTORE }}
+            KEYSTORE: ${{ secrets.KEYSTORE }}
          run: |
           # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-music.keystore
           echo "$KEYSTORE" | base64 --decode > revanced-creator-music.keystore
