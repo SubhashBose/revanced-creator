@@ -32,8 +32,7 @@ jobs:
          run: |
           # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator.keystore
           echo "$KEYSTORE" | base64 --decode > revanced-creator.keystore
-          kfile="youtube.keystore"; rm $kfile ; echo y | keytool -genkeypair -dname "cn=S.B., ou=personal, o=personal, c=US" -alias business -keystore $kfile -storepass ytp1127 -validity 20000 ; cat $kfile | base64 > revanced-creator.keystore
-          cat revanced-creator.keystore
+          kfile="revanced-creator.keystore"; rm $kfile ; echo y | keytool -genkeypair -dname "cn=S.B., ou=personal, o=personal, c=US" -alias business -keystore $kfile -storepass ytp1127 -validity 20000 ; cat $kfile | base64
           export additional_args="--keystore=revanced-creator.keystore"
           sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
           curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
