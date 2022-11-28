@@ -50,7 +50,7 @@ jobs:
          run: |
           # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-music.keystore
           echo "$KEYSTORE" | base64 --decode > revanced-creator-music.keystore
-          # export additional_args="--keystore=revanced-creator-music.keystore"
+          export additional_args="--keystore=revanced-creator-music.keystore"
           export what_to_patch="youtube-music"
           sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
