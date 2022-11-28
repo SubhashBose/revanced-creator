@@ -32,9 +32,9 @@ jobs:
          run: |
           # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator.keystore
           echo "$KEYSTORE" | base64 --decode > revanced-creator.keystore
-          kfile="revanced-creator.keystore"; rm $kfile ; echo y | keytool -genkey -dname "cn=S.B., ou=personal, o=personal, c=US" -alias business -keystore $kfile -keyalg RSA -storepass ytp1127 -validity 20000 ; cat $kfile | base64
-          export additional_args="--keystore=revanced-creator.keystore"
+          #export additional_args="--keystore=revanced-creator.keystore"
           sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          cat revanced-youtube*.keystore |base64
           curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
 
        - name: Upload Build Artifact(youtube)
