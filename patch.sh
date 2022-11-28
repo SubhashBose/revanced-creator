@@ -198,7 +198,7 @@ main() {
 	fi
 
 	## get stock apk_version
-	equals "$what_to_patch" "custom" || notset "$apk_version" && apk_version=$(curl -s -L "https://api.github.com/repos/XDream8/revanced-creator/releases" | $grep -io "$what_to_patch-[0-9].*[0-9]" | grep -o "[0-9].*[0-9]" | uniq | sort | awk 'END{print}')
+	equals "$what_to_patch" "custom" || notset "$apk_version" && apk_version=$(curl -s -L "https://api.github.com/repos/SubhashBose/revanced-creator/releases" | $grep -io "$what_to_patch-[0-9].*[0-9]" | grep -o "[0-9].*[0-9]" | uniq | sort | awk 'END{print}')
 	equals "$what_to_patch" "custom" || out "${YELLOW}$what_to_patch version to be patched : $apk_version${NC}"
 
 	## what should we patch
