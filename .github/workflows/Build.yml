@@ -27,11 +27,14 @@ jobs:
           sudo apt install curl grep
 
        - name: Build youtube
+         env:
+            KEYSTORE: ${{ secrets.YOUTUBE_KEYSTORE }}
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator.keystore
-          # export additional_args="--keystore=revanced-creator.keystore"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-          curl -OL https://github.com/XDream8/revanced-creator/releases/download/youtube/vanced-microg.apk
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator.keystore
+          echo "$KEYSTORE" | base64 --decode > revanced-creator.keystore
+          export additional_args="--keystore=revanced-creator.keystore"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
 
        - name: Upload Build Artifact(youtube)
          uses: actions/upload-artifact@v3
@@ -42,11 +45,14 @@ jobs:
             vanced-microg.apk
 
        - name: Build youtube-music
+         env:
+            KEYSTORE: ${{ secrets.YTMUSIC_KEYSTORE }}
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator-music.keystore
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-music.keystore
+          echo "$KEYSTORE" | base64 --decode > revanced-creator-music.keystore
           # export additional_args="--keystore=revanced-creator-music.keystore"
           export what_to_patch="youtube-music"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Upload Build Artifact(YouTube-Music)
          uses: actions/upload-artifact@v3
@@ -57,7 +63,7 @@ jobs:
        - name: Build twitch
          run: |
           export what_to_patch="twitch"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Upload Build Artifact(Twitch)
          uses: actions/upload-artifact@v3
@@ -67,10 +73,10 @@ jobs:
 
        - name: Build reddit
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator-reddit.keystore
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-reddit.keystore
           # export additional_args="--keystore=revanced-creator-reddit.keystore"
           export what_to_patch="reddit"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Upload Build Artifact(Reddit)
          uses: actions/upload-artifact@v3
@@ -80,10 +86,10 @@ jobs:
 
        - name: Build twitter
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator-twitter.keystore
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-twitter.keystore
           # export additional_args="--keystore=revanced-creator-twitter.keystore"
           export what_to_patch="twitter"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Upload Build Artifact(Twitter)
          uses: actions/upload-artifact@v3
@@ -94,7 +100,7 @@ jobs:
        - name: Build tiktok
          run: |
           export what_to_patch="tiktok"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Upload Build Artifact(TikTok)
          uses: actions/upload-artifact@v3
@@ -105,7 +111,7 @@ jobs:
        - name: Build spotify
          run: |
           export what_to_patch="spotify"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Upload Build Artifact(Spotify)
          uses: actions/upload-artifact@v3
