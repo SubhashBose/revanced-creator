@@ -49,6 +49,47 @@ jobs:
             revanced-youtube-*-non-root.apk
             vanced-microg.apk
 
+   build-youtube-black:
+     runs-on: ubuntu-latest
+
+     steps:
+       - uses: actions/checkout@v3
+
+       - name: Install Java
+         uses: actions/setup-java@v3
+         with:
+           distribution: 'zulu'
+           java-version: '17'
+
+       - name: Update the system
+         run: sudo apt install curl ripgrep
+
+       - name: Build youtube
+         env:
+            KEYSTORE: ${{ secrets.KEYSTORE }}
+         run: |
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator.keystore
+          echo "$KEYSTORE" | base64 --decode > revanced-creator.keystore
+          export additional_args="--keystore=revanced-creator.keystore -i theme"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          #cat revanced-youtube*.keystore |base64
+          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
+
+       - name: Check if revanced-youtube apk is created
+         id: check_files
+         uses: andstor/file-existence-action@v2
+         with:
+           files: "revanced-youtube-*-non-root.apk"
+           fail: true
+
+       - name: Upload Build Artifact(youtube)
+         uses: actions/upload-artifact@v3
+         with:
+           name: revanced-youtube-black
+           path: |
+            revanced-youtube-*-non-root.apk
+            vanced-microg.apk
+
    build-yt-music:
      runs-on: ubuntu-latest
 
