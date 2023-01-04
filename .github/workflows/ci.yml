@@ -1,9 +1,9 @@
 name: CI
 
 on:
-   push:
-     paths:
-       - 'release-versions/*'
+#   push:
+#     paths:
+#       - 'release-versions/*'
    workflow_dispatch:
 
 
@@ -24,11 +24,15 @@ jobs:
          run: sudo apt install curl ripgrep
 
        - name: Build youtube
+         env:
+            KEYSTORE: ${{ secrets.KEYSTORE }}
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator.keystore
-          # export additional_args="--keystore=revanced-creator.keystore"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-          curl -OL https://github.com/XDream8/revanced-creator/releases/download/youtube/vanced-microg.apk
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator.keystore
+          echo "$KEYSTORE" | base64 --decode > revanced-creator.keystore
+          export additional_args="--keystore=revanced-creator.keystore"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          #cat revanced-youtube*.keystore |base64
+          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
 
        - name: Check if revanced-youtube apk is created
          id: check_files
@@ -61,11 +65,14 @@ jobs:
          run: sudo apt install curl ripgrep
 
        - name: Build youtube-music
+         env:
+            KEYSTORE: ${{ secrets.KEYSTORE }}
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator-music.keystore
-          # export additional_args="--keystore=revanced-creator-music.keystore"
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-music.keystore
+          echo "$KEYSTORE" | base64 --decode > revanced-creator-music.keystore
+          export additional_args="--keystore=revanced-creator-music.keystore"
           export what_to_patch="youtube-music"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Check if revanced-music apk is created
          id: check_files
@@ -97,7 +104,7 @@ jobs:
        - name: Build twitch
          run: |
           export what_to_patch="twitch"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Check if revanced-twitch apk is created
          id: check_files
@@ -129,10 +136,10 @@ jobs:
 
        - name: Build reddit
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator-reddit.keystore
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-reddit.keystore
           # export additional_args="--keystore=revanced-creator-reddit.keystore"
           export what_to_patch="reddit"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Check if revanced-reddit apk is created
          id: check_files
@@ -163,10 +170,10 @@ jobs:
          run: sudo apt install curl ripgrep
        - name: Build twitter
          run: |
-          # curl -OL https://github.com/XDream8/revanced-creator/releases/download/keystores/revanced-creator-twitter.keystore
+          # curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/keystores/revanced-creator-twitter.keystore
           # export additional_args="--keystore=revanced-creator-twitter.keystore"
           export what_to_patch="twitter"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Check if revanced-twitter apk is created
          id: check_files
@@ -198,7 +205,7 @@ jobs:
        - name: Build tiktok
          run: |
           export what_to_patch="tiktok"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Check if revanced-tiktok apk is created
          id: check_files
@@ -230,7 +237,7 @@ jobs:
        - name: Build spotify
          run: |
           export what_to_patch="spotify"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
 
        - name: Check if revanced-spotify apk is created
          id: check_files
