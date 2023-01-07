@@ -268,7 +268,7 @@ main() {
 	cli_filename=revanced-cli-$revanced_cli_version-all.jar
 	patches_filename=revanced-patches-$revanced_patches_version.jar
 	integrations_filename=app-release-unsigned.apk
-	integrations_filename=revanced-integrations-0.91.1.apk #temp fix for integration filename change in repo
+	integrations_filename=revanced-integrations-$revanced_integrations_version.apk #temp fix for integration filename change in repo
 
 	## add integrations arg
 	if [ "$integrations" = "enabled" ]; then
