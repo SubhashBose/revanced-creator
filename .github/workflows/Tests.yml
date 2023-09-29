@@ -1,8 +1,8 @@
 name: Tests
 on:
-  push:
-    paths:
-      - '*.sh'
+  #push:
+  #  paths:
+  #    - '*.sh'
   workflow_dispatch:
 jobs:
   linux:

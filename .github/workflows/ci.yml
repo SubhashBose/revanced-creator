@@ -1,8 +1,8 @@
 name: CI
 on:
-  push:
-    paths:
-      - 'release-versions/*'
+  #push:
+  #  paths:
+  #    - 'release-versions/*'
   workflow_dispatch:
 jobs:
   update-system:
@@ -32,8 +32,9 @@ jobs:
           if [ -f "revanced-creator.keystore" ]; then
             export additional_args="--keystore=revanced-creator.keystore"
           fi
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-          curl -OL https://github.com/XDream8/revanced-creator/releases/download/youtube/vanced-microg.apk
+		  export additional_args="${additional_args} -e hide-watch-in-vr -e hide-video-buttons -e hide-shorts-button -e hide-my-mix -e hide-info-cards -e hide-endscreen-cards -e hide-email-address -e hide-create-button -e hide-captions-button -e hide-breaking-news-shelf -e hide-autoplay-button -e hide-artist-card -e hide-album-cards -e enable-wide-searchbar -e downloads"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
       - name: Check if revanced-youtube apk is created
         id: check_files
         uses: andstor/file-existence-action@v2
@@ -44,6 +45,44 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: revanced-youtube
+          path: |
+            revanced-youtube-*-non-root.apk
+            vanced-microg.apk
+  build-youtube-black:
+    needs: update-system
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Get keystore file
+        env:
+          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+        run: |
+          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+          fi
+      - name: Build youtube
+        run: |
+          if [ -f "revanced-creator.keystore" ]; then
+            export additional_args="--keystore=revanced-creator.keystore"
+          fi
+		  export additional_args="${additional_args} -i theme -e hide-watch-in-vr -e hide-video-buttons -e hide-shorts-button -e hide-my-mix -e hide-info-cards -e hide-endscreen-cards -e hide-email-address -e hide-create-button -e hide-captions-button -e hide-breaking-news-shelf -e hide-autoplay-button -e hide-artist-card -e hide-album-cards -e enable-wide-searchbar -e downloads"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
+      - name: Check if revanced-youtube apk is created
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "revanced-youtube-*-non-root.apk"
+          fail: true
+      - name: Upload Build Artifact(youtube)
+        uses: actions/upload-artifact@v3
+        with:
+          name: revanced-youtube-black
           path: |
             revanced-youtube-*-non-root.apk
             vanced-microg.apk
@@ -70,7 +109,7 @@ jobs:
              export additional_args="--keystore=revanced-creator.keystore"
           fi
           export what_to_patch="youtube-music"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
       - name: Check if revanced-music apk is created
         id: check_files
         uses: andstor/file-existence-action@v2
@@ -82,178 +121,178 @@ jobs:
         with:
           name: revanced-music
           path: revanced-music-*-non-root.apk
-  build-twitch:
-    needs: update-system
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - name: Get keystore file
-        env:
-          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
-        run: |
-          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
-            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
-          fi
-      - name: Build twitch
-        run: |
-          if [ -f "revanced-creator.keystore" ]; then
-             export additional_args="--keystore=revanced-creator.keystore"
-          fi
-          export what_to_patch="twitch"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-      - name: Check if revanced-twitch apk is created
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: "revanced-twitch-*-non-root.apk"
-          fail: true
-      - name: Upload Build Artifact(Twitch)
-        uses: actions/upload-artifact@v3
-        with:
-          name: revanced-twitch
-          path: revanced-twitch-*-non-root.apk
-  build-reddit:
-    needs: update-system
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - name: Get keystore file
-        env:
-          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
-        run: |
-          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
-            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
-          fi
-      - name: Build reddit
-        run: |
-          if [ -f "revanced-creator.keystore" ]; then
-             export additional_args="--keystore=revanced-creator.keystore"
-          fi
-          export what_to_patch="reddit"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-      - name: Check if revanced-reddit apk is created
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: "revanced-reddit-*-non-root.apk"
-          fail: true
-      - name: Upload Build Artifact(Reddit)
-        uses: actions/upload-artifact@v3
-        with:
-          name: revanced-reddit
-          path: revanced-reddit-*-non-root.apk
-  build-twitter:
-    needs: update-system
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - name: Get keystore file
-        env:
-          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
-        run: |
-          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
-            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
-          fi
-      - name: Build twitter
-        run: |
-          if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore"
-          fi
-          export what_to_patch="twitter"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-      - name: Check if revanced-twitter apk is created
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: "revanced-twitter-*-non-root.apk"
-          fail: true
-      - name: Upload Build Artifact(Twitter)
-        uses: actions/upload-artifact@v3
-        with:
-          name: revanced-twitter
-          path: revanced-twitter-*-non-root.apk
-  build-tiktok:
-    needs: update-system
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - name: Get keystore file
-        env:
-          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
-        run: |
-          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
-            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
-          fi
-      - name: Build tiktok
-        run: |
-          if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore"
-          fi
-          export what_to_patch="tiktok"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-      - name: Check if revanced-tiktok apk is created
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: "revanced-tiktok-*-non-root.apk"
-          fail: true
-      - name: Upload Build Artifact(TikTok)
-        uses: actions/upload-artifact@v3
-        with:
-          name: revanced-tiktok
-          path: revanced-tiktok-*-non-root.apk
-  build-spotify:
-    needs: update-system
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: '17'
-      - name: Get keystore file
-        env:
-          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
-        run: |
-          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
-            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
-          fi
-      - name: Build spotify
-        run: |
-          if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore"
-          fi
-          export what_to_patch="spotify"
-          sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
-      - name: Check if revanced-spotify apk is created
-        id: check_files
-        uses: andstor/file-existence-action@v2
-        with:
-          files: "revanced-spotify-*-non-root.apk"
-          fail: true
-      - name: Upload Build Artifact(Spotify)
-        uses: actions/upload-artifact@v3
-        with:
-          name: revanced-spotify
-          path: revanced-spotify-*-non-root.apk
+  #build-twitch:
+  #  needs: update-system
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Install Java
+  #      uses: actions/setup-java@v3
+  #      with:
+  #        distribution: 'zulu'
+  #        java-version: '17'
+  #    - name: Get keystore file
+  #      env:
+  #        REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+  #      run: |
+  #        if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+  #          printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+  #        fi
+  #    - name: Build twitch
+  #      run: |
+  #        if [ -f "revanced-creator.keystore" ]; then
+  #           export additional_args="--keystore=revanced-creator.keystore"
+  #        fi
+  #        export what_to_patch="twitch"
+  #        sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+  #    - name: Check if revanced-twitch apk is created
+  #      id: check_files
+  #      uses: andstor/file-existence-action@v2
+  #      with:
+  #        files: "revanced-twitch-*-non-root.apk"
+  #        fail: true
+  #    - name: Upload Build Artifact(Twitch)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: revanced-twitch
+  #        path: revanced-twitch-*-non-root.apk
+  #build-reddit:
+  #  needs: update-system
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Install Java
+  #      uses: actions/setup-java@v3
+  #      with:
+  #        distribution: 'zulu'
+  #        java-version: '17'
+  #    - name: Get keystore file
+  #      env:
+  #        REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+  #      run: |
+  #        if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+  #          printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+  #        fi
+  #    - name: Build reddit
+  #      run: |
+  #        if [ -f "revanced-creator.keystore" ]; then
+  #           export additional_args="--keystore=revanced-creator.keystore"
+  #        fi
+  #        export what_to_patch="reddit"
+  #        sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+  #    - name: Check if revanced-reddit apk is created
+  #      id: check_files
+  #      uses: andstor/file-existence-action@v2
+  #      with:
+  #        files: "revanced-reddit-*-non-root.apk"
+  #        fail: true
+  #    - name: Upload Build Artifact(Reddit)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: revanced-reddit
+  #        path: revanced-reddit-*-non-root.apk
+  #build-twitter:
+  #  needs: update-system
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Install Java
+  #      uses: actions/setup-java@v3
+  #      with:
+  #        distribution: 'zulu'
+  #        java-version: '17'
+  #    - name: Get keystore file
+  #      env:
+  #        REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+  #      run: |
+  #        if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+  #          printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+  #        fi
+  #    - name: Build twitter
+  #      run: |
+  #        if [ -f "revanced-creator.keystore" ]; then
+  #          export additional_args="--keystore=revanced-creator.keystore"
+  #        fi
+  #        export what_to_patch="twitter"
+  #        sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+  #    - name: Check if revanced-twitter apk is created
+  #      id: check_files
+  #      uses: andstor/file-existence-action@v2
+  #      with:
+  #        files: "revanced-twitter-*-non-root.apk"
+  #        fail: true
+  #    - name: Upload Build Artifact(Twitter)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: revanced-twitter
+  #        path: revanced-twitter-*-non-root.apk
+  #build-tiktok:
+  #  needs: update-system
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Install Java
+  #      uses: actions/setup-java@v3
+  #      with:
+  #        distribution: 'zulu'
+  #        java-version: '17'
+  #    - name: Get keystore file
+  #      env:
+  #        REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+  #      run: |
+  #        if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+  #          printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+  #        fi
+  #    - name: Build tiktok
+  #      run: |
+  #        if [ -f "revanced-creator.keystore" ]; then
+  #          export additional_args="--keystore=revanced-creator.keystore"
+  #        fi
+  #        export what_to_patch="tiktok"
+  #        sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+  #    - name: Check if revanced-tiktok apk is created
+  #      id: check_files
+  #      uses: andstor/file-existence-action@v2
+  #      with:
+  #        files: "revanced-tiktok-*-non-root.apk"
+  #        fail: true
+  #    - name: Upload Build Artifact(TikTok)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: revanced-tiktok
+  #        path: revanced-tiktok-*-non-root.apk
+  #build-spotify:
+  #  needs: update-system
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Install Java
+  #      uses: actions/setup-java@v3
+  #      with:
+  #        distribution: 'zulu'
+  #        java-version: '17'
+  #    - name: Get keystore file
+  #      env:
+  #        REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+  #      run: |
+  #        if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+  #          printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+  #        fi
+  #    - name: Build spotify
+  #      run: |
+  #        if [ -f "revanced-creator.keystore" ]; then
+  #          export additional_args="--keystore=revanced-creator.keystore"
+  #        fi
+  #        export what_to_patch="spotify"
+  #        sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+  #    - name: Check if revanced-spotify apk is created
+  #      id: check_files
+  #      uses: andstor/file-existence-action@v2
+  #      with:
+  #        files: "revanced-spotify-*-non-root.apk"
+  #        fail: true
+  #    - name: Upload Build Artifact(Spotify)
+  #      uses: actions/upload-artifact@v3
+  #      with:
+  #        name: revanced-spotify
+  #        path: revanced-spotify-*-non-root.apk

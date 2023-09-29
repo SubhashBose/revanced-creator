@@ -230,12 +230,12 @@ main() {
 	esac
 
 	addarg "--custom-aapt2-binary=./$aapt2_filename"
-	[ ! -f "$aapt2_filename" ] && aapt2_link="https://github.com/XDream8/revanced-creator/releases/download/other/$aapt2_filename"
+	[ ! -f "$aapt2_filename" ] && aapt2_link="https://github.com/SubhashBose/revanced-creator/releases/download/other/$aapt2_filename"
     fi
 
     ## get stock apk_version
     if [ ! "$what_to_patch" = "custom" ]; then
-	notset "$apk_version" && apk_version=$(curl -sL -H 'User-Agent: revanced-creator' "https://api.github.com/repos/XDream8/revanced-creator/releases" | sed 's/"name":"/\n/g; s/.apk",/\n/g' | $grep -ioe "^$what_to_patch-[0-9].*[0-9]" | $grep -oe "[0-9].*[0-9]" | awk 'END{print}')
+	notset "$apk_version" && apk_version=$(curl -sL -H 'User-Agent: revanced-creator' "https://api.github.com/repos/SubhashBose/revanced-creator/releases" | sed 's/"name":"/\n/g; s/.apk",/\n/g' | $grep -ioe "^$what_to_patch-[0-9].*[0-9]" | $grep -oe "[0-9].*[0-9]" | awk 'END{print}')
 	notset "$apk_version" && {
 	    out "${RED}getting $what_to_patch apk version failed, exiting!${NC}"
 	    exit 1
@@ -316,7 +316,7 @@ main() {
     }
 
     ## link to download $what_to_patch
-    [ ! -f "$apk_filename" ] && apk_link=https://github.com/XDream8/revanced-creator/releases/download/$what_to_patch/$apk_filename
+    [ ! -f "$apk_filename" ] && apk_link=https://github.com/SubhashBose/revanced-creator/releases/download/$what_to_patch/$apk_filename
 
     ## remove old files with find
     remove_old
