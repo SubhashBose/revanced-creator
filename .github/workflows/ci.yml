@@ -66,6 +66,7 @@ jobs:
         run: |
           if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
             printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+            keytool -v -list -keystore revanced-creator.keystore
           fi
       - name: Build youtube
         run: |
