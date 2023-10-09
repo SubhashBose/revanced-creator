@@ -70,7 +70,7 @@ jobs:
       - name: Build youtube
         run: |
           if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore --alias=alias --keystore-password=ReVanced"
+            export additional_args="--keystore=revanced-creator.keystore --alias=alias"
           fi
           #export additional_args="${additional_args} -i theme -e hide-watch-in-vr -e hide-video-buttons -e hide-shorts-button -e hide-my-mix -e hide-info-cards -e hide-endscreen-cards -e hide-email-address -e hide-create-button -e hide-captions-button -e hide-breaking-news-shelf -e hide-autoplay-button -e hide-artist-card -e hide-album-cards -e enable-wide-searchbar -e downloads"
           export additional_args="${additional_args} -i theme -i custom-branding -e external-downloads -e hide-album-cards -e hide-autoplay-button -e hide-breaking-news-shelf -e hide-captions-button -e hide-email-address -e hide-endscreen-cards -e hide-info-cards -e hide-video-action-buttons -e disable-shorts-on-startup -e hide-shorts-components -e hide-filter-bar -e hide-player-buttons -e hide-seekbar -e hide-timestamp -e wide-searchbar"
