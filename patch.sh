@@ -144,7 +144,7 @@ patch() {
     if ! notset "$additional_args"; then
 	# with $additional_args
 	$base_cmd \
-	    $additional_args
+	    "${additional_args[@]}"
     elif notset "$additional_args"; then
 	# without $additional_args
 	$base_cmd
