@@ -30,7 +30,7 @@ jobs:
       - name: Build youtube
         run: |
           if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore"
+            export additional_args="--keystore=revanced-creator.keystore --alias=alias --keystore-entry-password=ReVanced"
           fi
           export additional_args="${additional_args} -i custom-branding -e external-downloads -e hide-album-cards -e hide-autoplay-button -e hide-breaking-news-shelf -e hide-captions-button -e hide-email-address -e hide-endscreen-cards -e hide-info-cards -e hide-video-action-buttons -e disable-shorts-on-startup -e hide-shorts-components -e hide-filter-bar -e hide-player-buttons -e hide-seekbar -e hide-timestamp -e wide-searchbar"
           wget 'https://github.com/SubhashBose/revanced-creator/releases/download/resources/YouTube-IconSet.zip' && unzip YouTube-IconSet.zip
@@ -111,7 +111,7 @@ jobs:
       - name: Build youtube-music
         run: |
           if [ -f "revanced-creator.keystore" ]; then
-             export additional_args="--keystore=revanced-creator.keystore"
+             export additional_args="--keystore=revanced-creator.keystore --alias=alias --keystore-entry-password=ReVanced"
           fi
           export what_to_patch="youtube-music"
           sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
