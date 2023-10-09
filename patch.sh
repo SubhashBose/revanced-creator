@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash
 # shellcheck disable=2154
 
 #---------------------------#
