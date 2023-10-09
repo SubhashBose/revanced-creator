@@ -143,6 +143,7 @@ patch() {
     # shellcheck disable=2086
     if ! notset "$additional_args"; then
 	# with $additional_args
+ 	eval additional_args=($additional_args)
 	$base_cmd \
 	    "${additional_args[@]}"
     elif notset "$additional_args"; then
