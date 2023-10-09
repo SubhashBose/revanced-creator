@@ -77,7 +77,7 @@ jobs:
           wget 'https://github.com/SubhashBose/revanced-creator/releases/download/resources/YouTube-IconSet.zip' && unzip YouTube-IconSet.zip
           echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           echo 
-          sh -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+          bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
           curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
       - name: Check if revanced-youtube apk is created
         id: check_files
