@@ -213,7 +213,7 @@ main() {
 	sleep 5s
 	checkadb
 	addarg "-d $device_id \
-	  -e microg-support \
+	  -e 'Vanced MicroG support' \
 	  --mount"
     fi
 
@@ -249,7 +249,7 @@ main() {
 	youtube)
 	    apk_filename=YouTube-$apk_version.apk
 	    integrations="enabled"
-	    addarg "-e enable-debugging"
+	    addarg "-e 'Enable debugging'"
 	    ;;
 	youtube-music)
 	    apk_filename=YouTube-Music-$apk_version.apk
@@ -257,7 +257,7 @@ main() {
 	twitch)
 	    apk_filename=Twitch-$apk_version.apk
 	    integrations="enabled"
-	    addarg "-e debug-mode"
+	    addarg "-e 'Debug mode'"
 	    ;;
 	twitter)
 	    apk_filename=Twitter-$apk_version.apk
