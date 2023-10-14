@@ -32,7 +32,7 @@ jobs:
           if [ -f "revanced-creator.keystore" ]; then
             export additional_args="--keystore=revanced-creator.keystore --alias=alias --keystore-entry-password=ReVanced"
           fi
-          export additional_args="${additional_args} -e Theme -i 'Custom branding' -e 'External downloads' -e 'Hide album cards' -e 'Hide autoplay button' -e 'Hide breaking news shelf' -e 'Hide captions button' -e 'Hide email address' -e 'Hide endscreen cards' -e 'Hide info cards' -e 'Hide video action buttons' -e 'Disable Shorts on startup' -e 'Hide Shorts components' -e 'Hide filter bar' -e 'Hide player buttons' -e 'Hide seekbar' -e 'Hide timestamp' -e 'Wide searchbar'"
+          export additional_args="${additional_args} -e Theme -i 'Custom branding' -e 'External downloads' -e 'Hide album cards' -e 'Hide autoplay button' -e 'Hide breaking news shelf' -e 'Hide captions button' -e 'Hide email address' -e 'Hide endscreen cards' -e 'Hide info cards' -e 'Hide video action buttons' -e 'Disable Shorts on startup' -e 'Hide Shorts components' -e 'Hide filter bar' -e 'Hide player buttons' -e 'Hide seekbar' -e 'Hide timestamp' -e 'Wide searchbar' -e 'Disable fine scrubbing gesture'"
           wget 'https://github.com/SubhashBose/revanced-creator/releases/download/resources/YouTube-IconSet.zip' && unzip YouTube-IconSet.zip
           echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
