@@ -37,7 +37,7 @@ jobs:
           echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
           #curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
-          curl -s https://api.github.com/repos/ReVanced/GmsCore/releases/latest | grep 'browser_download_url.*app.revanced.android.gms-.*.apk' | cut -d ':' -f 2,3 | tr -d \" | wget -qi - -O app.revanced.android.gms.apk
+          wget -qO - https://api.github.com/repos/ReVanced/GmsCore/releases/latest | grep 'browser_download_url.*app.revanced.android.gms-.*.apk' | cut -d '"' -f 4 | wget -qi -
       - name: Check if revanced-youtube apk is created
         id: check_files
         uses: andstor/file-existence-action@v2
@@ -80,7 +80,7 @@ jobs:
           echo 
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
           #curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
-          curl -s https://api.github.com/repos/ReVanced/GmsCore/releases/latest | grep 'browser_download_url.*app.revanced.android.gms-.*.apk' | cut -d ':' -f 2,3 | tr -d \" | wget -qi - -O app.revanced.android.gms.apk
+          wget -qO - https://api.github.com/repos/ReVanced/GmsCore/releases/latest | grep 'browser_download_url.*app.revanced.android.gms-.*.apk' | cut -d '"' -f 4 | wget -qi -
       - name: Check if revanced-youtube apk is created
         id: check_files
         uses: andstor/file-existence-action@v2
