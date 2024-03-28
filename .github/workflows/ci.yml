@@ -36,7 +36,8 @@ jobs:
           wget 'https://github.com/SubhashBose/revanced-creator/releases/download/resources/YouTube-IconSet.zip' && unzip YouTube-IconSet.zip
           echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
-          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
+          #curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
+          curl -s https://api.github.com/repos/ReVanced/GmsCore/releases/latest | grep 'browser_download_url.*app.revanced.android.gms-.*.apk' | cut -d ':' -f 2,3 | tr -d \" | wget -qi - -O app.revanced.android.gms.apk
       - name: Check if revanced-youtube apk is created
         id: check_files
         uses: andstor/file-existence-action@v2
@@ -49,7 +50,7 @@ jobs:
           name: revanced-youtube
           path: |
             revanced-youtube-*-non-root.apk
-            vanced-microg.apk
+            app.revanced.android.gms.apk
   build-youtube-black:
     needs: update-system
     runs-on: ubuntu-latest
@@ -78,7 +79,8 @@ jobs:
           echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           echo 
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
-          curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
+          #curl -OL https://github.com/SubhashBose/revanced-creator/releases/download/youtube/vanced-microg.apk
+          curl -s https://api.github.com/repos/ReVanced/GmsCore/releases/latest | grep 'browser_download_url.*app.revanced.android.gms-.*.apk' | cut -d ':' -f 2,3 | tr -d \" | wget -qi - -O app.revanced.android.gms.apk
       - name: Check if revanced-youtube apk is created
         id: check_files
         uses: andstor/file-existence-action@v2
@@ -91,7 +93,7 @@ jobs:
           name: revanced-youtube-black
           path: |
             revanced-youtube-*-non-root.apk
-            vanced-microg.apk
+            app.revanced.android.gms.apk
   build-yt-music:
     needs: update-system
     runs-on: ubuntu-latest
