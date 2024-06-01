@@ -253,6 +253,7 @@ main() {
 	    ;;
 	youtube-music)
 	    apk_filename=YouTube-Music-$apk_version.apk
+	    integrations="enabled"
 	    ;;
 	twitch)
 	    apk_filename=Twitch-$apk_version.apk
