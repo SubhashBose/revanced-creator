@@ -30,9 +30,9 @@ jobs:
       - name: Build youtube
         run: |
           if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-***=ReVanced"
+            export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-password=ReVanced"
           fi
-          export additional_args="${additional_args} -d Theme -e 'Custom branding' -OappName 'YouTube Premium' -OiconPath './YouTube-IconSet' -d 'External downloads' -d 'Hide album cards' -d 'Hide autoplay button' -d 'Hide breaking news shelf' -d 'Hide captions button' -d 'Hide email address' -d 'Hide endscreen cards' -d 'Hide info cards' -d 'Hide video action buttons' -d 'Disable Shorts on startup' -d 'Hide Shorts components' -d 'Hide filter bar' -d 'Hide player buttons' -d 'Hide seekbar' -d 'Hide timestamp' -d 'Wide searchbar' -d 'Disable fine scrubbing gesture'"
+          export additional_args="${additional_args} -d Theme -e 'Custom branding' -OappName='YouTube Premium' -OiconPath='./YouTube-IconSet' -d 'External downloads' -d 'Hide album cards' -d 'Hide autoplay button' -d 'Hide breaking news shelf' -d 'Hide captions button' -d 'Hide email address' -d 'Hide endscreen cards' -d 'Hide info cards' -d 'Hide video action buttons' -d 'Disable Shorts on startup' -d 'Hide Shorts components' -d 'Hide filter bar' -d 'Hide player buttons' -d 'Hide seekbar' -d 'Hide timestamp' -d 'Wide searchbar' -d 'Disable fine scrubbing gesture'"
           wget 'https://github.com/SubhashBose/revanced-creator/releases/download/resources/YouTube-IconSet.zip' && unzip YouTube-IconSet.zip
           #echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
@@ -71,10 +71,10 @@ jobs:
       - name: Build youtube
         run: |
           if [ -f "revanced-creator.keystore" ]; then
-            export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-***=ReVanced"
+            export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-password=ReVanced"
           fi
           #export additional_args="${additional_args} -i theme -e hide-watch-in-vr -e hide-video-buttons -e hide-shorts-button -e hide-my-mix -e hide-info-cards -e hide-endscreen-cards -e hide-email-address -e hide-create-button -e hide-captions-button -e hide-breaking-news-shelf -e hide-autoplay-button -e hide-artist-card -e hide-album-cards -e enable-wide-searchbar -e downloads"
-          export additional_args="${additional_args} --options options.json -e Theme -e 'Custom branding' -OappName 'YouTube Premium' -OiconPath './YouTube-IconSet' -d 'External downloads' -d 'Hide album cards' -d 'Hide autoplay button' -d 'Hide breaking news shelf' -d 'Hide captions button' -d 'Hide email address' -d 'Hide endscreen cards' -d 'Hide info cards' -d 'Hide video action buttons' -d 'Disable Shorts on startup' -d 'Hide Shorts components' -d 'Hide filter bar' -d 'Hide player buttons' -d 'Hide seekbar' -d 'Hide timestamp' -d 'Wide searchbar' -d 'Disable fine scrubbing gesture' -d 'Restore old video quality menu' -d 'Disable precise seeking gesture' -d 'Enable slide to seek' -d 'Announcements' -e 'Spoof client'"
+          export additional_args="${additional_args} --options options.json -e Theme -e 'Custom branding' -OappName='YouTube Premium' -OiconPath='./YouTube-IconSet' -d 'External downloads' -d 'Hide album cards' -d 'Hide autoplay button' -d 'Hide breaking news shelf' -d 'Hide captions button' -d 'Hide email address' -d 'Hide endscreen cards' -d 'Hide info cards' -d 'Hide video action buttons' -d 'Disable Shorts on startup' -d 'Hide Shorts components' -d 'Hide filter bar' -d 'Hide player buttons' -d 'Hide seekbar' -d 'Hide timestamp' -d 'Wide searchbar' -d 'Disable fine scrubbing gesture' -d 'Restore old video quality menu' -d 'Disable precise seeking gesture' -d 'Enable slide to seek' -d 'Announcements' -e 'Spoof client'"
           wget 'https://github.com/SubhashBose/revanced-creator/releases/download/resources/YouTube-IconSet.zip' && unzip YouTube-IconSet.zip
           #echo '[{"patchName" : "Custom branding", "options" : [{"key" : "appName", "value" : "YouTube Premium" }, {"key" : "iconPath", "value" : "./YouTube-IconSet" }] }]' > options.json
           echo 
@@ -114,7 +114,7 @@ jobs:
       - name: Build youtube-music
         run: |
           if [ -f "revanced-creator.keystore" ]; then
-             export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-***=ReVanced"
+             export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-password=ReVanced"
           fi
           export what_to_patch="youtube-music"
           bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
