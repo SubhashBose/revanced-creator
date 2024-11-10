@@ -247,28 +247,28 @@ main() {
     case "$what_to_patch" in
 	youtube)
 	    apk_filename=YouTube-$apk_version.apk
-	    integrations="enabled"
+	    integrations="disable"
 	    addarg "-d 'Enable debugging'"
 	    ;;
 	youtube-music)
 	    apk_filename=YouTube-Music-$apk_version.apk
-	    integrations="enabled"
+	    integrations="disable"
 	    ;;
 	twitch)
 	    apk_filename=Twitch-$apk_version.apk
-	    integrations="enabled"
+	    integrations="disable"
 	    addarg "-e 'Debug mode'"
 	    ;;
 	twitter)
 	    apk_filename=Twitter-$apk_version.apk
-	    integrations="enabled"
+	    integrations="disable"
 	    ;;
 	reddit)
 	    apk_filename=Reddit-$apk_version.apk
 	    ;;
 	tiktok)
 	    apk_filename=TikTok-$apk_version.apk
-	    integrations="enabled"
+	    integrations="disable"
 	    ;;
 	spotify)
 	    apk_filename=Spotify-$apk_version.apk
