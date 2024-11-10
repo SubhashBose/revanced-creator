@@ -138,8 +138,7 @@ patch() {
     out "${BLUE}it may take a while please be patient${NC}"
     base_cmd="java -jar $cli_filename patch $apk_filename \
 		-o $output_apk \
-  		-p \
-		-b $patches_filename"
+		-p $patches_filename"
     # shellcheck disable=2086
     if ! notset "$additional_args"; then
 	# with $additional_args
@@ -249,7 +248,7 @@ main() {
 	youtube)
 	    apk_filename=YouTube-$apk_version.apk
 	    integrations="enabled"
-	    addarg "-e 'Enable debugging'"
+	    addarg "-d 'Enable debugging'"
 	    ;;
 	youtube-music)
 	    apk_filename=YouTube-Music-$apk_version.apk
