@@ -303,7 +303,7 @@ main() {
 
     ## set filenames
     cli_filename=revanced-cli-$revanced_cli_version-all.jar
-    patches_filename=revanced-patches-$revanced_patches_version.jar
+    patches_filename=revanced-patches-$revanced_patches_version.rvp
     integrations_filename=revanced-integrations-$revanced_integrations_version.apk
 
     ## add integrations arg
