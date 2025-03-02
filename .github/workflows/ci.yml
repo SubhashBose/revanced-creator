@@ -88,7 +88,7 @@ jobs:
           files: "revanced-youtube-*-non-root.apk"
           fail: true
       - name: Upload Build Artifact(youtube)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: revanced-youtube-black
           path: |
@@ -125,7 +125,7 @@ jobs:
           files: "revanced-music-*-non-root.apk"
           fail: true
       - name: Upload Build Artifact(YouTube-Music)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: revanced-music
           path: revanced-music-*-non-root.apk
@@ -159,8 +159,8 @@ jobs:
         with:
           files: "revanced-photos-*-non-root.apk"
           fail: true
-      - name: Upload Build Artifact(YouTube-Music)
-        uses: actions/upload-artifact@v3
+      - name: Upload Build Artifact(Google Photos)
+        uses: actions/upload-artifact@v4
         with:
           name: revanced-photos
           path: revanced-photos-*-non-root.apk
