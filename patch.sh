@@ -255,7 +255,7 @@ main() {
 	    integrations="disable"
 	    ;;
 	google-photos)
-	    apk_filename=GooglePhotos-$apk_version.apk
+	    apk_filename=Google-Photos-$apk_version.apk
 	    integrations="disable"
 	    ;;
 	twitch)
