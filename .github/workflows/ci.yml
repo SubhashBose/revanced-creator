@@ -45,7 +45,7 @@ jobs:
           files: "revanced-youtube-*-non-root.apk"
           fail: true
       - name: Upload Build Artifact(youtube)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: revanced-youtube
           path: |
