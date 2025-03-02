@@ -254,6 +254,10 @@ main() {
 	    apk_filename=YouTube-Music-$apk_version.apk
 	    integrations="disable"
 	    ;;
+	google-photos)
+	    apk_filename=GooglePhotos-$apk_version.apk
+	    integrations="disable"
+	    ;;
 	twitch)
 	    apk_filename=Twitch-$apk_version.apk
 	    integrations="disable"

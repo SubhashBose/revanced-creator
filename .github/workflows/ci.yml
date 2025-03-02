@@ -129,6 +129,41 @@ jobs:
         with:
           name: revanced-music
           path: revanced-music-*-non-root.apk
+  build-google-photos:
+    needs: update-system
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Get keystore file
+        env:
+          REVANCED_CREATOR_KEYSTORE: ${{ secrets.REVANCED_CREATOR_KEYSTORE }}
+        run: |
+          if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
+            printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+          fi
+      - name: Build google-photos
+        run: |
+          if [ -f "revanced-creator.keystore" ]; then
+             export additional_args="--keystore=revanced-creator.keystore --keystore-entry-alias=alias --keystore-entry-password=ReVanced"
+          fi
+          export what_to_patch="google-photos"
+          bash -c "$(curl https://raw.githubusercontent.com/SubhashBose/revanced-creator/main/patch.sh)"
+      - name: Check if revanced-photos apk is created
+        id: check_files
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "revanced-photos-*-non-root.apk"
+          fail: true
+      - name: Upload Build Artifact(YouTube-Music)
+        uses: actions/upload-artifact@v3
+        with:
+          name: revanced-photos
+          path: revanced-photos-*-non-root.apk
 #  build-twitch:
 #    needs: update-system
 #    runs-on: ubuntu-latest
