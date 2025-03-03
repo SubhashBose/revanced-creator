@@ -16,6 +16,15 @@ jobs:
       - name: Create tag
         id: create_tag
         run: |
+          rm -rf ./revanced-youtube
+          mv -f ./*/*.apk .
+          ls -l
           tag=$(date +%Y-%m-%d_%H%M%S)
-          ls -R
-          echo "::set-output name=tag::$tag"
+          "echo "{tag}={$tag}" >> $GITHUB_OUTPUT
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.apk"
+          tag_name: ${{ steps.create_tag.outputs.tag }}
+          repository: "sbose-lab/rv-apps"
+          token: ${{ secrets.RV_APPS_REPO_TOKEN }}
