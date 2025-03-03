@@ -21,7 +21,7 @@ jobs:
           mv -f ./*/*.apk .
           ls -l
           tag=$(date +%Y-%m-%d_%H%M%S)
-          echo "{tag}={$tag}" >> $GITHUB_OUTPUT
+          echo "tag=$tag" >> $GITHUB_OUTPUT
       
       - name: Release
         uses: softprops/action-gh-release@v2
