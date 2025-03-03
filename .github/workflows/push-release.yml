@@ -13,6 +13,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v9
         with:
             workflow: ci.yml
+      
       - name: Create tag
         id: create_tag
         run: |
@@ -20,7 +21,8 @@ jobs:
           mv -f ./*/*.apk .
           ls -l
           tag=$(date +%Y-%m-%d_%H%M%S)
-          "echo "{tag}={$tag}" >> $GITHUB_OUTPUT
+          echo "{tag}={$tag}" >> $GITHUB_OUTPUT
+      
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
