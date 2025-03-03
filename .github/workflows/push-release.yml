@@ -1,0 +1,21 @@
+name: Push release
+on:
+#  push:
+#    paths:
+#      - 'release-versions/*'
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v9
+        with:
+            workflow: ci.yml
+      - name: Create tag
+        id: create_tag
+        run: |
+          tag=$(date +%Y-%m-%d_%H%M%S)
+          ls -R
+          echo "::set-output name=tag::$tag"
