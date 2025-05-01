@@ -12,12 +12,9 @@
 **What does this do?**
 
 1. downloading the latest [revanced-cli](https://github.com/revanced/revanced-cli), [revanced-patches](https://github.com/revanced/revanced-patches) and [revanced-integrations](https://github.com/revanced/revanced-integrations).
-2. downloading the latest supported youtube(yt-music, reddit, twitter, tiktok) version
+2. downloading the latest supported app
 3. creating revanced app according to [revanced-documentation](https://github.com/revanced/revanced-documentation)
 
-**Check out [github action artifacts](https://github.com/XDream8/revanced-creator/actions) for revanced apks built with this script**.\
-Download the latest CI builds [here](https://nightly.link/XDream8/revanced-creator/workflows/ci/main).
-You can also download them [in codeberg releases page](https://codeberg.org/XDream8/revanced-creator/releases/tag/apks).
 
 ## deps
 
@@ -119,6 +116,3 @@ $ export apk_version=17.27.39
 $ ./patch.sh
 ```
 
-### mentions
-
-- @halal-beef [added CI](https://github.com/XDream8/revanced-creator/pull/3) which was a great help
