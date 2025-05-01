@@ -28,5 +28,5 @@ jobs:
         with:
           files: "*.apk"
           tag_name: ${{ steps.create_tag.outputs.tag }}
-          repository: "sbose-lab/rv-apps"
+          repository: "grey-lab-sb/rv-apps"
           token: ${{ secrets.RV_APPS_REPO_TOKEN }}
