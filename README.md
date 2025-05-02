@@ -30,13 +30,13 @@
 ```sh
 $ mkdir -p revanced
 $ cd revanced
-$ sh -c "$(curl https://raw.githubusercontent.com/XDream8/revanced-creator/main/patch.sh)"
+$ sh -c "$(curl https://raw.githubusercontent.com/USER/REPO/main/patch.sh)"
 ```
 
 - or
 
 ```sh
-$ git clone https://github.com/XDream8/revanced-creator
+$ git clone https://github.com/USER/REPO
 $ cd revanced-creator
 $ ./patch.sh
 ```
