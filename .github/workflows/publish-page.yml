@@ -1,16 +1,17 @@
 #This is to be run in target repo
+#Requrie PAGEBALL_PASS secret
 
 name: Publish Pages
 
 on:
   workflow_dispatch:
   repository_dispatch:
-
 jobs:
   build:
     permissions:
       pages: write
       id-token: write
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Download release

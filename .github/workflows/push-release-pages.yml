@@ -1,3 +1,5 @@
+# RV_APPS_REPO_TOKEN fine grained permission permissions: "Contents" :write 
+
 name: Push release
 on:
 #  push:
@@ -47,4 +49,8 @@ jobs:
           tag_name: ${{ steps.create_tag.outputs.tag }}
           repository: "${{ secrets.RV_APPS_REPO_PATH }}"
           token: "${{ secrets.RV_APPS_REPO_TOKEN }}"
+
+      - name: Trigger Publish Page remote
+        run: |
+            curl -H "Authorization: token ${{ secrets.RV_APPS_REPO_TOKEN }}" https://api.github.com/repos/${{ secrets.RV_APPS_REPO_PATH }}/dispatches --request POST --data '{"event_type": "Publish Page Trigger"}' -s
         
