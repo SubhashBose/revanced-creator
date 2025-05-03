@@ -1,4 +1,5 @@
 # RV_APPS_REPO_TOKEN fine grained permission permissions: "Contents" :write 
+# RV_APPS_REPO_PATH is USER/REPO
 
 name: Push release pages
 on:
@@ -33,9 +34,10 @@ jobs:
             echo "<!DOCTYPE html>
             <html><head><title>List apps</title></head><body>
             <h1>Available APK Files</h1><ul>" > applist.html
+            basepath=`echo "${{ secrets.RV_APPS_REPO_PATH }}" | sed 's|/|.github.io/|g'`
             for apk in *.apk; do
                 if [[ -f "$apk" ]]; then
-                    echo "<li><a href=\"$apk\">$apk</a></li>" >> applist.html
+                    echo "<li><a href=\"https://${basepath}/$apk\">$apk</a></li>" >> applist.html
                 fi
             done
             echo "</ul></body></html>" >> applist.html
