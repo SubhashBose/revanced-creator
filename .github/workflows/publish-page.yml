@@ -17,7 +17,7 @@ jobs:
       - name: Download release
         run: |
             wget "https://github.com/${GITHUB_REPOSITORY}/releases/latest/download/pageball.zip"
-            unzip -P -P '${{ secrets.PAGEBALL_PASS }}' pageball.zip
+            unzip -P '${{ secrets.PAGEBALL_PASS }}' pageball.zip
             
       - name: Upload static files as artifact
         id: deployment

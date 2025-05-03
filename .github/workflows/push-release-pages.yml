@@ -1,6 +1,6 @@
 # RV_APPS_REPO_TOKEN fine grained permission permissions: "Contents" :write 
 
-name: Push release
+name: Push release pages
 on:
 #  push:
 #    paths:
