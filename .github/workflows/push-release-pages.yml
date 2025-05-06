@@ -34,15 +34,18 @@ jobs:
             echo "<!DOCTYPE html>
             <html><head><title>List apps</title></head><body>
             <h1>Available APK Files</h1><ul>" > applist.html
+            echo '{ ' > applist.json
             basepath=`echo "${{ secrets.RV_APPS_REPO_PATH }}" | sed 's|/|.github.io/|g'`
             for apk in *.apk; do
                 if [[ -f "$apk" ]]; then
-                    hash=`echo -n "$apk" | md5sum | awk '{print $1}'`
+                    hash=`echo -n "salt-djhh332s$apk" | md5sum | awk '{print $1}'`
                     mv "$apk" $hash
                     echo "<li><a href=\"https://${basepath}/$hash\">$apk</a></li>" >> applist.html
+                    echo "\"$apk\": \"https://${basepath}/$hash\"," >> applist.json
                 fi
             done
             echo "</ul></body></html>" >> applist.html
+            echo '"null": "null" }' >> applist.json
             cd ..
             zip -e -P '${{ secrets.PAGEBALL_PASS }}' -r pageball.zip pageball/
       
