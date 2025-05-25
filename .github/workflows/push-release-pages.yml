@@ -53,7 +53,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "pageball.zip"
-          body: " "
+          body: "."
           tag_name: ${{ steps.create_tag.outputs.tag }}
           repository: "${{ secrets.RV_APPS_REPO_PATH }}"
           token: "${{ secrets.RV_APPS_REPO_TOKEN }}"
