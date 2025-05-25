@@ -1,5 +1,5 @@
 # RV_APPS_REPO_TOKEN fine grained permission permissions: "Contents" :write 
-# RV_APPS_REPO_PATH is USER/REPO
+# RV_APPS_REPO_PATH is target USER/REPO
 
 name: Push release pages
 on:
@@ -53,6 +53,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: "pageball.zip"
+          body: " "
           tag_name: ${{ steps.create_tag.outputs.tag }}
           repository: "${{ secrets.RV_APPS_REPO_PATH }}"
           token: "${{ secrets.RV_APPS_REPO_TOKEN }}"
