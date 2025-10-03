@@ -78,8 +78,8 @@ checkyt() {
 
 get_version_info() {
     ## revanced cli
-    resp=$(curl -sL -H 'User-Agent: revanced-creator' "https://github.com/revanced/revanced-$1/releases/latest")
-    ver=$(printf '%s' "$resp" | $grep -oe "v[0-9].*[0-9]" | awk -F'/' 'NR==1 {print $1}')
+    resp=$(curl -sL "https://github.com/ReVanced/revanced-$1/releases/latest")
+    ver=$(printf '%s' "$resp" | $grep -oe "tag/v[0-9].*[0-9]" | sort -n | awk -F'/' 'NR==1 {print $NF}')
     ver=${ver#v}
     printf '%s\n' "$ver" >"cache/tmp.revanced_$1"
 }
