@@ -275,12 +275,12 @@ apkrebrand(){
 	#--out "$OUT_APK" \
 	#"$ALIGNED"
 
-	java -jar $cli_filename \
+	java -jar $cli_filename patch \
+	"$UNSIGNED" \
 	--keystore "$KEYSTORE" \
 	--keystore-entry-alias "$ALIAS" \
 	--keystore-entry-password "$STOREPASS" \
-	--out "$OUT_APK" \
-	"$ALIGNED"
+	--out "$OUT_APK" 
 
 
 	echo "[*] Verifying signature..."
