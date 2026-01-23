@@ -275,7 +275,7 @@ apkrebrand(){
 	#--out "$OUT_APK" \
 	#"$ALIGNED"
 
-	revanced-cli \
+	java -jar $cli_filename \
 	--sign-only \
 	--keystore "$KEYSTORE" \
 	--keystore-entry-alias "$ALIAS" \
