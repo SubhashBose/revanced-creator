@@ -269,8 +269,9 @@ apkrebrand(){
 	apksigner sign \
 	--ks "$KEYSTORE" \
 	--ks-type PKCS12 \
+	--ks-pass pass: \
 	--ks-key-alias "$ALIAS" \
-	--ks-pass pass:"$STOREPASS" \
+	--key-pass pass:"$STOREPASS" \
 	--out "$OUT_APK" \
 	"$ALIGNED"
 
