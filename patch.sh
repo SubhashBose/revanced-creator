@@ -268,6 +268,7 @@ apkrebrand(){
 	echo "[*] Signing APK..."
 	apksigner sign \
 	--ks "$KEYSTORE" \
+	--ks-type PKCS12 \
 	--ks-key-alias "$ALIAS" \
 	--ks-pass pass:"$STOREPASS" \
 	--out "$OUT_APK" \
