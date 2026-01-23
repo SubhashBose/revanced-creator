@@ -70,6 +70,7 @@ jobs:
           fi
       - name: Build youtube
         run: |
+          sudo apt install -y zipalign   unzip   wget apktool apksigner
           export keystore_file=revanced-creator.keystore
           export keystore_alias=alias
           export keystore_password=ReVanced

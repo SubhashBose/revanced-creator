@@ -160,9 +160,13 @@ addarg() {
 }
 
 apkrebrand(){
+	#!/bin/bash
+	#set -e
+
 	WORKDIR=work_apk
-	OUT_APK=final.apk
 	UNSIGNED=unsigned.apk
+	ALIGNED=aligned.apk
+	OUT_APK=final.apk
 
 	while getopts "i:n:c:k:a:p:o:" opt; do
 	case $opt in
@@ -183,26 +187,94 @@ apkrebrand(){
 	fi
 
 	echo "[*] Cleaning..."
-	rm -rf "$WORKDIR" "$UNSIGNED"
+	rm -rf "$WORKDIR" "$UNSIGNED" "$ALIGNED"
 
 	echo "[*] Decompiling APK..."
 	apktool d "$APK" -o "$WORKDIR" -f
 
-	echo "[*] Updating app name..."
-	STRINGS="$WORKDIR/res/values/strings.xml"
-	sed -i.bak "s|<string name=\"app_name\">.*</string>|<string name=\"app_name\">$APP_NAME</string>|" "$STRINGS"
+	MANIFEST="$WORKDIR/AndroidManifest.xml"
 
-	echo "[*] Replacing icons..."
-	for d in "$ICON_DIR"/mipmap-*; do
-	TARGET="$WORKDIR/res/$(basename "$d")"
-	[[ -d "$d" ]] && mkdir -p "$TARGET" && cp "$d"/*.png "$TARGET/"
+	# -------------------------------------------------
+	# APP NAME HANDLING (YouTube-safe)
+	# -------------------------------------------------
+	echo "[*] Detecting app label..."
+
+	LABEL=$(grep -oP 'android:label="\K[^"]+' "$MANIFEST" | head -n1)
+
+	if [[ -z "$LABEL" ]]; then
+	echo "❌ Could not detect android:label"
+	exit 1
+	fi
+
+	if [[ "$LABEL" == @string/* ]]; then
+	STRING_NAME="${LABEL#@string/}"
+	echo "[*] App label uses string: $STRING_NAME"
+
+	for f in "$WORKDIR"/res/values*/strings.xml; do
+		if grep -q "<string name=\"$STRING_NAME\">" "$f"; then
+		sed -i.bak \
+			"s|<string name=\"$STRING_NAME\">.*</string>|<string name=\"$STRING_NAME\">$APP_NAME</string>|" \
+			"$f"
+		fi
+	done
+	else
+	echo "[*] App label is literal, replacing in manifest"
+	sed -i.bak \
+		"s|android:label=\"[^\"]*\"|android:label=\"$APP_NAME\"|" \
+		"$MANIFEST"
+	fi
+
+	# -------------------------------------------------
+	# ICON HANDLING (Auto-detect)
+	# -------------------------------------------------
+	echo "[*] Detecting launcher icons..."
+
+	ICON_REFS=$(grep -oP 'android:icon="\K[^"]+' "$MANIFEST" | sort -u)
+
+	if [[ -z "$ICON_REFS" ]]; then
+	echo "❌ No android:icon found"
+	exit 1
+	fi
+
+	for ICON_REF in $ICON_REFS; do
+	if [[ "$ICON_REF" == @mipmap/* ]]; then
+		ICON_NAME="${ICON_REF#@mipmap/}"
+		echo "[*] Found mipmap icon: $ICON_NAME"
+
+		for SRC in "$ICON_DIR"/mipmap-*; do
+		DENSITY=$(basename "$SRC")
+		TARGET="$WORKDIR/res/$DENSITY"
+
+		if [[ -f "$SRC/$ICON_NAME.png" ]]; then
+			mkdir -p "$TARGET"
+			cp "$SRC/$ICON_NAME.png" "$TARGET/$ICON_NAME.png"
+		fi
+		done
+
+	elif [[ "$ICON_REF" == @drawable/* ]]; then
+		ICON_NAME="${ICON_REF#@drawable/}"
+		echo "[*] Found drawable icon: $ICON_NAME"
+
+		for SRC in "$ICON_DIR"/drawable-*; do
+		DENSITY=$(basename "$SRC")
+		TARGET="$WORKDIR/res/$DENSITY"
+
+		if [[ -f "$SRC/$ICON_NAME.png" ]]; then
+			mkdir -p "$TARGET"
+			cp "$SRC/$ICON_NAME.png" "$TARGET/$ICON_NAME.png"
+		fi
+		done
+	fi
 	done
 
+	# -------------------------------------------------
+	# BUILD + SIGN
+	# -------------------------------------------------
 	echo "[*] Rebuilding APK..."
 	apktool b "$WORKDIR" -o "$UNSIGNED"
 
 	echo "[*] Zipalign..."
-	zipalign -f -v 4 "$UNSIGNED" aligned.apk
+	zipalign -f -v 4 "$UNSIGNED" "$ALIGNED"
 
 	echo "[*] Signing with apksigner..."
 	apksigner sign \
@@ -210,7 +282,7 @@ apkrebrand(){
 	--ks-key-alias "$ALIAS" \
 	--ks-pass pass:"$STOREPASS" \
 	--out "$OUT_APK" \
-	aligned.apk
+	"$ALIGNED"
 
 	echo "[*] Verifying signature..."
 	apksigner verify "$OUT_APK"
