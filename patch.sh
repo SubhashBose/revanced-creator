@@ -262,18 +262,27 @@ apkrebrand(){
 	# -------------------------------------------------
 	# ZIPALIGN + SIGN
 	# -------------------------------------------------
-	echo "[*] Zipalign..."
-	zipalign -f 4 "$UNSIGNED" "$ALIGNED"
+	#echo "[*] Zipalign..."
+	#zipalign -f 4 "$UNSIGNED" "$ALIGNED"
 
 	echo "[*] Signing APK..."
-	apksigner sign \
-	--ks "$KEYSTORE" \
-	--ks-type PKCS12 \
-	--ks-pass pass: \
-	--ks-key-alias "$ALIAS" \
-	--key-pass pass:"$STOREPASS" \
+	#apksigner sign \
+	#--ks "$KEYSTORE" \
+	#--ks-type PKCS12 \
+	#--ks-pass pass: \
+	#--ks-key-alias "$ALIAS" \
+	#--key-pass pass:"$STOREPASS" \
+	#--out "$OUT_APK" \
+	#"$ALIGNED"
+
+	revanced-cli \
+	--sign-only \
+	--keystore "$KEYSTORE" \
+	--keystore-entry-alias "$ALIAS" \
+	--keystore-entry-password "$STOREPASS" \
 	--out "$OUT_APK" \
 	"$ALIGNED"
+
 
 	echo "[*] Verifying signature..."
 	apksigner verify "$OUT_APK"
