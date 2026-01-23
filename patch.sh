@@ -159,6 +159,67 @@ addarg() {
     fi
 }
 
+apkrebrand(){
+	WORKDIR=work_apk
+	OUT_APK=final.apk
+	UNSIGNED=unsigned.apk
+
+	while getopts "i:n:c:k:a:p:o:" opt; do
+	case $opt in
+		i) APK="$OPTARG" ;;
+		n) APP_NAME="$OPTARG" ;;
+		c) ICON_DIR="$OPTARG" ;;
+		k) KEYSTORE="$OPTARG" ;;
+		a) ALIAS="$OPTARG" ;;
+		p) STOREPASS="$OPTARG" ;;
+		o) OUT_APK="$OPTARG" ;;
+		*) echo "Invalid option"; exit 1 ;;
+	esac
+	done
+
+	if [[ -z "$APK" || -z "$APP_NAME" || -z "$ICON_DIR" || -z "$KEYSTORE" || -z "$ALIAS" || -z "$STOREPASS" ]]; then
+	echo "❌ Missing required arguments"
+	exit 1
+	fi
+
+	echo "[*] Cleaning..."
+	rm -rf "$WORKDIR" "$UNSIGNED"
+
+	echo "[*] Decompiling APK..."
+	apktool d "$APK" -o "$WORKDIR" -f
+
+	echo "[*] Updating app name..."
+	STRINGS="$WORKDIR/res/values/strings.xml"
+	sed -i.bak "s|<string name=\"app_name\">.*</string>|<string name=\"app_name\">$APP_NAME</string>|" "$STRINGS"
+
+	echo "[*] Replacing icons..."
+	for d in "$ICON_DIR"/mipmap-*; do
+	TARGET="$WORKDIR/res/$(basename "$d")"
+	[[ -d "$d" ]] && mkdir -p "$TARGET" && cp "$d"/*.png "$TARGET/"
+	done
+
+	echo "[*] Rebuilding APK..."
+	apktool b "$WORKDIR" -o "$UNSIGNED"
+
+	echo "[*] Zipalign..."
+	zipalign -f -v 4 "$UNSIGNED" aligned.apk
+
+	echo "[*] Signing with apksigner..."
+	apksigner sign \
+	--ks "$KEYSTORE" \
+	--ks-key-alias "$ALIAS" \
+	--ks-pass pass:"$STOREPASS" \
+	--out "$OUT_APK" \
+	aligned.apk
+
+	echo "[*] Verifying signature..."
+	apksigner verify "$OUT_APK"
+
+	echo "✅ Done!"
+	echo "📦 Output APK: $OUT_APK"
+
+}
+
 main() {
 
     ## defaults
@@ -352,6 +413,17 @@ main() {
 	fi
 
 	patch
+
+	if [[ -n "$appName" ]]; then
+		apkrebrand  \
+			-i "${output_apk}" \
+			-n "${appName}" \
+			-c ${appIconset}/ \
+			-k ${keystore_file} \
+			-a ${keystore_alias} \
+			-p ${keystore_password} \
+			-o "resigned_${output_apk}"
+	fi
 }
 
 main
