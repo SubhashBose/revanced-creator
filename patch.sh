@@ -276,7 +276,6 @@ apkrebrand(){
 	#"$ALIGNED"
 
 	java -jar $cli_filename \
-	--sign-only \
 	--keystore "$KEYSTORE" \
 	--keystore-entry-alias "$ALIAS" \
 	--keystore-entry-password "$STOREPASS" \
