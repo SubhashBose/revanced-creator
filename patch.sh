@@ -271,7 +271,8 @@ apkrebrand(){
 	# BUILD + SIGN
 	# -------------------------------------------------
 	echo "[*] Rebuilding APK..."
-	apktool b "$WORKDIR" --use-aapt2 -o "$UNSIGNED"
+	export APKTOOL_AAPT2=$(find /usr/local/lib/android/sdk/build-tools -name aapt2 | sort | tail -n1)
+	apktool b "$WORKDIR" --use-aapt2 -r -o "$UNSIGNED"
 
 	echo "[*] Zipalign..."
 	zipalign -f -v 4 "$UNSIGNED" "$ALIGNED"
