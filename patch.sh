@@ -189,97 +189,83 @@ apkrebrand(){
 	echo "[*] Cleaning..."
 	rm -rf "$WORKDIR" "$UNSIGNED" "$ALIGNED"
 
-	echo "[*] Decompiling APK..."
-	apktool d "$APK" -o "$WORKDIR" -f
+	# -------------------------------------------------
+	# DECODE (NO RESOURCE DECODING)
+	# -------------------------------------------------
+	echo "[*] Decoding APK (resource-safe mode)..."
+	apktool d -s "$APK" -o "$WORKDIR" -f
 
 	MANIFEST="$WORKDIR/AndroidManifest.xml"
 
 	# -------------------------------------------------
-	# APP NAME HANDLING (YouTube-safe)
+	# APP NAME (MANIFEST ONLY)
 	# -------------------------------------------------
-	echo "[*] Detecting app label..."
+	echo "[*] Setting app name (manifest literal)..."
 
-	LABEL=$(grep -oP 'android:label="\K[^"]+' "$MANIFEST" | head -n1)
-
-	if [[ -z "$LABEL" ]]; then
-	echo "❌ Could not detect android:label"
-	exit 1
-	fi
-
-	if [[ "$LABEL" == @string/* ]]; then
-	STRING_NAME="${LABEL#@string/}"
-	echo "[*] App label uses string: $STRING_NAME"
-
-	for f in "$WORKDIR"/res/values*/strings.xml; do
-		if grep -q "<string name=\"$STRING_NAME\">" "$f"; then
-		sed -i.bak \
-			"s|<string name=\"$STRING_NAME\">.*</string>|<string name=\"$STRING_NAME\">$APP_NAME</string>|" \
-			"$f"
-		fi
-	done
-	else
-	echo "[*] App label is literal, replacing in manifest"
+	if grep -q 'android:label="' "$MANIFEST"; then
 	sed -i.bak \
 		"s|android:label=\"[^\"]*\"|android:label=\"$APP_NAME\"|" \
 		"$MANIFEST"
-	fi
-
-	# -------------------------------------------------
-	# ICON HANDLING (Auto-detect)
-	# -------------------------------------------------
-	echo "[*] Detecting launcher icons..."
-
-	ICON_REFS=$(grep -oP 'android:icon="\K[^"]+' "$MANIFEST" | sort -u)
-
-	if [[ -z "$ICON_REFS" ]]; then
-	echo "❌ No android:icon found"
+	else
+	echo "❌ android:label not found"
 	exit 1
 	fi
 
-	for ICON_REF in $ICON_REFS; do
-	if [[ "$ICON_REF" == @mipmap/* ]]; then
-		ICON_NAME="${ICON_REF#@mipmap/}"
-		echo "[*] Found mipmap icon: $ICON_NAME"
+	# -------------------------------------------------
+	# ICON DETECTION
+	# -------------------------------------------------
+	echo "[*] Detecting launcher icon references..."
+	ICON_REFS=$(grep -oP 'android:icon="\K[^"]+' "$MANIFEST" | sort -u)
+
+	if [[ -z "$ICON_REFS" ]]; then
+	echo "⚠️ No android:icon found, skipping icon replacement"
+	else
+	for REF in $ICON_REFS; do
+		if [[ "$REF" == @mipmap/* ]]; then
+		ICON_NAME="${REF#@mipmap/}"
+		echo "[*] Replacing mipmap icon: $ICON_NAME"
 
 		for SRC in "$ICON_DIR"/mipmap-*; do
-		DENSITY=$(basename "$SRC")
-		TARGET="$WORKDIR/res/$DENSITY"
+			DENSITY=$(basename "$SRC")
+			TARGET="$WORKDIR/res/$DENSITY/$ICON_NAME.png"
 
-		if [[ -f "$SRC/$ICON_NAME.png" ]]; then
-			mkdir -p "$TARGET"
-			cp "$SRC/$ICON_NAME.png" "$TARGET/$ICON_NAME.png"
-		fi
+			if [[ -f "$SRC/$ICON_NAME.png" && -f "$TARGET" ]]; then
+			cp "$SRC/$ICON_NAME.png" "$TARGET"
+			fi
 		done
 
-	elif [[ "$ICON_REF" == @drawable/* ]]; then
-		ICON_NAME="${ICON_REF#@drawable/}"
-		echo "[*] Found drawable icon: $ICON_NAME"
+		elif [[ "$REF" == @drawable/* ]]; then
+		ICON_NAME="${REF#@drawable/}"
+		echo "[*] Replacing drawable icon: $ICON_NAME"
 
 		for SRC in "$ICON_DIR"/drawable-*; do
-		DENSITY=$(basename "$SRC")
-		TARGET="$WORKDIR/res/$DENSITY"
+			DENSITY=$(basename "$SRC")
+			TARGET="$WORKDIR/res/$DENSITY/$ICON_NAME.png"
 
-		if [[ -f "$SRC/$ICON_NAME.png" ]]; then
-			mkdir -p "$TARGET"
-			cp "$SRC/$ICON_NAME.png" "$TARGET/$ICON_NAME.png"
-		fi
+			if [[ -f "$SRC/$ICON_NAME.png" && -f "$TARGET" ]]; then
+			cp "$SRC/$ICON_NAME.png" "$TARGET"
+			fi
 		done
-	fi
+		fi
 	done
+	fi
 
 	# -------------------------------------------------
-	# BUILD + SIGN
+	# REPACKAGE (NO AAPT)
 	# -------------------------------------------------
-	echo "[*] Rebuilding APK..."
-	export APKTOOL_AAPT2=$(find /usr/local/lib/android/sdk/build-tools -name aapt2 | sort | tail -n1)
-	#apktool b "$WORKDIR" --use-aapt2 -r -o "$UNSIGNED"
-	apktool b "$WORKDIR" -r -o "$UNSIGNED"
+	echo "[*] Repackaging APK (zip-only, no aapt)..."
+	(
+	cd "$WORKDIR"
+	zip -qr "../$UNSIGNED" .
+	)
 
-
+	# -------------------------------------------------
+	# ZIPALIGN + SIGN
+	# -------------------------------------------------
 	echo "[*] Zipalign..."
-	zipalign -f -v 4 "$UNSIGNED" "$ALIGNED"
+	zipalign -f 4 "$UNSIGNED" "$ALIGNED"
 
-	echo "[*] Signing with apksigner..."
+	echo "[*] Signing APK..."
 	apksigner sign \
 	--ks "$KEYSTORE" \
 	--ks-key-alias "$ALIAS" \
