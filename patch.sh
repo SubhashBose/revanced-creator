@@ -175,13 +175,13 @@ apkrebrand(){
 		c) ICON_DIR="$OPTARG" ;;
 		k) KEYSTORE="$OPTARG" ;;
 		a) ALIAS="$OPTARG" ;;
-		p) STOREPASS="$OPTARG" ;;
+		p) KEYPASS="$OPTARG" ;;
 		o) OUT_APK="$OPTARG" ;;
 		*) echo "Invalid option"; exit 1 ;;
 	esac
 	done
 
-	if [[ -z "$APK" || -z "$APP_NAME" || -z "$ICON_DIR" || -z "$KEYSTORE" || -z "$ALIAS" || -z "$STOREPASS" ]]; then
+	if [[ -z "$APK" || -z "$APP_NAME" || -z "$ICON_DIR" || -z "$KEYSTORE" || -z "$ALIAS" || -z "$KEYPASS" ]]; then
 	echo "❌ Missing required arguments"
 	exit 1
 	fi
@@ -262,8 +262,8 @@ apkrebrand(){
 	# -------------------------------------------------
 	# ZIPALIGN + SIGN
 	# -------------------------------------------------
-	#echo "[*] Zipalign..."
-	#zipalign -f 4 "$UNSIGNED" "$ALIGNED"
+	echo "[*] Zipalign..."
+	zipalign -f 4 "$UNSIGNED" "$ALIGNED"
 
 	echo "[*] Signing APK..."
 	#apksigner sign \
@@ -271,16 +271,26 @@ apkrebrand(){
 	#--ks-type PKCS12 \
 	#--ks-pass pass: \
 	#--ks-key-alias "$ALIAS" \
-	#--key-pass pass:"$STOREPASS" \
+	#--key-pass pass:"$KEYPASS" \
 	#--out "$OUT_APK" \
 	#"$ALIGNED"
 
-	java -jar $cli_filename patch \
-	"$UNSIGNED" \
-	--keystore "$KEYSTORE" \
-	--keystore-entry-alias "$ALIAS" \
-	--keystore-entry-password "$STOREPASS" \
-	--out "$OUT_APK" 
+
+	mv -f "$ALIGNED" "$OUT_APK"
+	jarsigner \
+	-keystore "$KEYSTORE" \
+	-storetype BKS \
+	-storepass "" \
+	-keypass "$KEYPASS" \
+	"$OUT_APK" \
+	"$ALIAS"
+
+	#java -jar $cli_filename patch \
+	#"$UNSIGNED" \
+	#--keystore "$KEYSTORE" \
+	#--keystore-entry-alias "$ALIAS" \
+	#--keystore-entry-password "$KEYPASS" \
+	#--out "$OUT_APK" 
 
 
 	echo "[*] Verifying signature..."
