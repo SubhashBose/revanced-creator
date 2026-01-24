@@ -283,6 +283,8 @@ apkrebrand(){
 	-storetype BKS \
 	-storepass "" \
 	-keypass "$KEYPASS" \
+	-providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
+	-providerArg /usr/share/java/bcprov.jar \
 	"$OUT_APK" \
 	"$ALIAS"
 
