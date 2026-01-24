@@ -276,15 +276,31 @@ apkrebrand(){
 	#"$ALIGNED"
 
 
-	export CLASSPATH=/usr/share/java/bcprov.jar:$CLASSPATH
+	cat > bc.security <<EOF
+security.provider.1=org.bouncycastle.jce.provider.BouncyCastleProvider
+security.provider.2=sun.security.provider.Sun
+security.provider.3=sun.security.rsa.SunRsaSign
+security.provider.4=sun.security.ec.SunEC
+security.provider.5=com.sun.net.ssl.internal.ssl.Provider
+security.provider.6=com.sun.crypto.provider.SunJCE
+security.provider.7=sun.security.jgss.SunProvider
+security.provider.8=com.sun.security.sasl.Provider
+security.provider.9=org.jcp.xml.dsig.internal.dom.XMLDSigRI
+security.provider.10=sun.security.smartcardio.SunPCSC
+security.provider.11=sun.security.provider.certpath.ldap.JdkLDAP
+security.provider.12=sun.security.provider.certpath.ssl.SSLServer
+security.provider.13=sun.security.pkcs11.SunPKCS11
+EOF
+	
+	#export CLASSPATH=/usr/share/java/bcprov.jar:$CLASSPATH
 	mv -f "$ALIGNED" "$OUT_APK"
 	jarsigner \
+	-J-Djava.security.properties=bc.security \
+	-J-Djava.class.path=/usr/share/java/bcprov.jar \
 	-keystore "$KEYSTORE" \
 	-storetype BKS \
 	-storepass "" \
 	-keypass "$KEYPASS" \
-	-providerClass org.bouncycastle.jce.provider.BouncyCastleProvider \
-	-providerArg /usr/share/java/bcprov.jar \
 	"$OUT_APK" \
 	"$ALIAS"
 
