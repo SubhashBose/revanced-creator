@@ -276,6 +276,7 @@ apkrebrand(){
 	#"$ALIGNED"
 
 
+	export CLASSPATH=/usr/share/java/bcprov.jar:$CLASSPATH
 	mv -f "$ALIGNED" "$OUT_APK"
 	jarsigner \
 	-keystore "$KEYSTORE" \
@@ -283,7 +284,6 @@ apkrebrand(){
 	-storepass "" \
 	-keypass "$KEYPASS" \
 	-providerclass org.bouncycastle.jce.provider.BouncyCastleProvider \
-	-providerpath /usr/share/java/bcprov.jar \
 	"$OUT_APK" \
 	"$ALIAS"
 
