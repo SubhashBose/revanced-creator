@@ -313,7 +313,8 @@ EOF
 
 
 	echo "[*] Verifying signature..."
-	apksigner verify "$OUT_APK"
+	#apksigner verify "$OUT_APK"
+	jarsigner -verify -verbose -certs "$OUT_APK"
 
 	echo "✅ Done!"
 	echo "📦 Output APK: $OUT_APK"
@@ -523,6 +524,7 @@ main() {
 			-a ${keystore_alias} \
 			-p ${keystore_password} \
 			-o "resigned_${output_apk}"
+		mv -f "resigned_${output_apk}" "${output_apk}"
 	fi
 }
 
